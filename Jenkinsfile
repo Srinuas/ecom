@@ -1,25 +1,11 @@
 pipeline {
     agent any
-    environment {
-        scannerHome = tool 'snr'
-    }
     stages {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    dir('src') {
-                        withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker build -t srinuas/onlineshop:cartservice ."
-                        }
-                    }
-                }
-            }
-        }
-        stage('cqa') {
-            steps {
-                script {
-                    withSonarQubeEnv('snr') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=myproj -Dsonar.projectName='myproj'"
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker build -t srinuas/onlineshop:cartservice ."
                     }
                 }
             }
